@@ -3,7 +3,7 @@ from variable import *
 import requests
 # import re
 
-ingredient = ["brown rice"]
+ingredient = ["mustard"]
 
 url = "https://livefitfood.ca"
 
@@ -31,15 +31,29 @@ def check_for_ingredient(boolean, product_name):
 
 
 def main(url):
-    request = requests.get(f"{url}/collections/meals")
-    soup = BeautifulSoup(request.content, "html.parser")
-    findProduct = soup.findAll("div", class_="info")
-    for i in findProduct:
-        undersoup = BeautifulSoup(str(i), "html.parser")
-        underfinder = undersoup.find("a")
-        product_name = underfinder["href"]
-        final_request = formulate_request(url, product_name)
-        check_for_ingredient(final_request, product_name)
+    # page_request = requests.get(f"{url}/collections/meals?&page={n}")
+    # page_soup = BeautifulSoup(page_request.content, "html.parser")
+    # page_validation = page_soup.find("p", class_="quote")
+    # print(page_validation)
+    n = 1
+    run = True
+    while run == True: 
+        request = requests.get(f"{url}/collections/meals?&page={n}")
+        soup = BeautifulSoup(request.content, "html.parser")
+        findProduct = soup.findAll("div", class_="info")
+        page_validation = soup.find("p", class_="quote")
+        if page_validation == None:
+            for i in findProduct:
+                undersoup = BeautifulSoup(str(i), "html.parser")
+                underfinder = undersoup.find("a")
+                product_name = underfinder["href"]
+                final_request = formulate_request(url, product_name)
+                check_for_ingredient(final_request, product_name)
+        else:
+            run == False
+            break
+        n += 1
+        continue
 
 if __name__ == "__main__":
     main(url) 
