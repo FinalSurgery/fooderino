@@ -24,7 +24,7 @@ def formulate_request(url, product_name):
 
 def check_for_ingredient(boolean, product_name):
     if "False" not in boolean:
-        print(product_name.split("/")[4])
+        print(f"https://livefitfood.ca/{product_name}")
     else:
         return ""
 
